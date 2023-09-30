@@ -6,10 +6,6 @@ import _ from 'lodash'
 interface ListData {
    type?: string
 }
-interface DisplayedData {
-   type: string,
-   data: object[]
-}
 
 export default function TableDetail({ data }: any) {
    const [listUnitType, setListUnitType] = useState<string[]>([])
@@ -29,11 +25,11 @@ export default function TableDetail({ data }: any) {
       processData(data)
    }, [data])
    return (
-      <div className={style.wrapTableData}>
+      <div className={`${style.wrapTableData}`}>
          {
             listUnitType.map((type, index) => (
-               <div key={index} className={style.outerCard}>
-                  <div className={style.tableCard}>
+               <div key={index} className={`${style.outerCard} `} >
+                  <div className={`${style.tableCard} ${elstyle.wrapTable}`}>
                      <h3 className={style.headTable}>{type}</h3>
                      <table className={elstyle.mapsummary}>
                         <thead>
@@ -61,8 +57,8 @@ export default function TableDetail({ data }: any) {
 const TableBody = (props: any) => {
    const { data, type } = props
    const [showDetail, setShowDetail] = useState<boolean>(false)
+   // get total value
    const getTotal = (data: any, unit: string, dataType: string) => {
-      console.log(data, unit)
       let filtered = data.find((it: any) => it.type == unit)
       if (dataType == 'mttr') {
          let countOnFormula = _.sumBy(filtered.data, 'dt_unsch') / _.sumBy(filtered.data, 'freq_unsch')
@@ -72,6 +68,9 @@ const TableBody = (props: any) => {
          return isNaN(countOnFormula) ? 0 : countOnFormula.toLocaleString('id-ID', { maximumFractionDigits: 2 })
       } else if (dataType == 'pa') {
          let countOnFormula = (_.sumBy(filtered.data, 'mohh') - _.sumBy(filtered.data, 'dt_all')) / _.sumBy(filtered.data, 'mohh') * 100
+         return countOnFormula.toFixed(2)
+      } else if (dataType == 'rasio') {
+         let countOnFormula = _.sumBy(filtered.data, 'dt_sch') / (_.sumBy(filtered.data, 'dt_all')) * 100
          return countOnFormula.toFixed(2)
       }
       return (_.sumBy(filtered.data, dataType)).toLocaleString('id-ID')
@@ -99,7 +98,7 @@ const TableBody = (props: any) => {
             <td>{getTotal(data, type, 'total_unit')}</td>
             <td>{getTotal(data, type, 'mohh')}</td>
             <td>{getTotal(data, type, 'dt_all')}</td>
-            <td>TOTAL</td>
+            <td>{getTotal(data, type, 'rasio')}</td>
             <td>{getTotal(data, type, 'mttr')}</td>
             <td>{getTotal(data, type, 'mtbf')}</td>
             <td>{getTotal(data, type, 'pa')}</td>

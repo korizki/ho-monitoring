@@ -9,13 +9,14 @@ import _ from 'lodash'
 import Navbar from './Navbar'
 import TableDetail from './TableDetail'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { faChevronLeft, faChevronRight, faPlay, faPause } from '@fortawesome/free-solid-svg-icons'
 
 export default function Dashboard() {
    let listSite = process.env.NEXT_PUBLIC_LIST_SITE ? process.env.NEXT_PUBLIC_LIST_SITE.split(",") : []
    const [listData, setListData] = useState<MyType.DataMachine[]>([])
    const [isSubmit, setIsSubmit] = useState<Boolean>(true)
    const [indexDisplay, setIndexDisplay] = useState<any>(0)
+   const [isAutoPlay, setIsAutoPlay] = useState(true)
    const [displayedData, setDisplayedData] = useState<MyType.DataMachine>({ site: '', data: [] })
    const [periode, setPeriode] = useState({
       startDate: '2023-09-01',
@@ -40,32 +41,42 @@ export default function Dashboard() {
          })
       })
    }
-   const handleUpdateIndex = (type: string, index: number) => {
+   const handleUpdateIndex = (type: string, index: number, num: number) => {
       if (type == 'prev') {
          if (indexDisplay == 0) {
             setIndexDisplay(listSite.length - 1)
          } else {
-            setIndexDisplay(index - 1)
+            setIndexDisplay(index - num)
          }
       } else {
          if (indexDisplay > listSite.length - 2) {
             setIndexDisplay(0)
          } else {
-            setIndexDisplay(index + 1)
+            setIndexDisplay(index + num)
          }
       }
    }
    useEffect(() => {
-      let listDataSite = _.map(listData, 'site')
-      let isExistAll = listSite.map(it => listDataSite.includes(it))
-      if (isExistAll.every(it => it == true)) {
-         let sortedData = listSite.map((item) => {
-            let filteredData = listData.filter(site => site.site == item)
-            return filteredData[0]
-         })
-         setDisplayedData(sortedData[indexDisplay])
+      if (isAutoPlay) {
+         let listDataSite = _.map(listData, 'site')
+         let isExistAll = listSite.map(it => listDataSite.includes(it))
+         if (isExistAll.every(it => it == true)) {
+            let sortedData = listSite.map((item) => {
+               let filteredData = listData.filter(site => site.site == item)
+               return filteredData[0]
+            })
+            setDisplayedData({ site: '', data: [] })
+            setTimeout(() => {
+               setDisplayedData(sortedData[indexDisplay])
+            }, 500)
+         }
       }
-   }, [listData, indexDisplay])
+   }, [listData, indexDisplay, isAutoPlay])
+   useEffect(() => {
+      if (isAutoPlay) {
+         setTimeout(() => handleUpdateIndex('next', indexDisplay, 1), 10000)
+      }
+   }, [isAutoPlay, indexDisplay])
    useEffect(() => {
    }, [displayedData])
    useEffect(() => {
@@ -92,9 +103,14 @@ export default function Dashboard() {
                   <a href=""> Ubah Periode.</a>
                </p>
             </div>
-            <div>
-               {
-                  activeTab != 3 && displayedData != undefined ? (<SiteIcon site={displayedData.site} />) : (
+            { /* navigasi play or pause auto play */
+               activeTab == 1 ? (
+                  <PlayNavigation auto={isAutoPlay} setPlay={setIsAutoPlay} />
+               ) : false
+            }
+            <div className={"w-[20em]"}>
+               { /* menampilkan info site  */
+                  activeTab != 3 && displayedData != undefined && displayedData.site != '' ? (<SiteIcon site={displayedData.site} />) : (
                      <h1>All Site</h1>
                   )
                }
@@ -120,17 +136,17 @@ const ContentDetailSite = (props: any) => {
          <a
             href="#"
             title="Previous Site"
-            onClick={() => handleUpdateIndex('prev', indexDisplay)}
+            onClick={() => handleUpdateIndex('prev', indexDisplay, 1)}
          >
             <FontAwesomeIcon icon={faChevronLeft} />
          </a>
-         <div className={style.tablecenter}>
+         <div className={`${style.tablecenter}`}>
             <TableDetail data={displayedData} />
          </div>
          <a
             href="#"
             title="Next Site"
-            onClick={() => handleUpdateIndex('next', indexDisplay)}
+            onClick={() => handleUpdateIndex('next', indexDisplay, 1)}
          >
             <FontAwesomeIcon icon={faChevronRight} />
          </a>
@@ -177,6 +193,26 @@ const LoadingForm = () => {
    return (
       <div className={style.loading}>
          <p className="text-[3.5em] text-white loadinganimate">Preparing your data</p>
+      </div>
+   )
+}
+const PlayNavigation = (props: any) => {
+   const { auto, setPlay } = props
+   return (
+      <div
+         className={`${style.playnavigation} ${elstyle.navplay}`}
+         onClick={() => setPlay(!auto)}
+      >
+         <a
+            href="#"
+            className={`p-2 text-2xl ${auto ? 'text-[#1B9C85]' : 'text-[#B70404]'}`}
+         >
+            <FontAwesomeIcon icon={auto ? faPause : faPlay} />
+         </a>
+         <div>
+            <h1 className={auto ? 'text-[#1B9C85]' : 'text-[#B70404]'}>{auto ? 'Now Playing' : 'Now Focus'}</h1>
+            <p>{auto ? 'Auto preview each Site' : 'Previewing one Site'}</p>
+         </div>
       </div>
    )
 }

@@ -90,3 +90,42 @@
    background: rgb(240, 240, 240);
    color: #61677A;
 }
+
+.navplay {
+   cursor: pointer;
+   transition: all 0.3s;
+   outline: 1px solid rgb(230, 230, 230);
+   box-shadow: 0px 0px 8px 0 rgb(230, 230, 230);
+}
+
+.navplay>div>h1 {
+   font-size: 1.2em;
+   font-weight: 600;
+   line-height: 1;
+   margin-bottom: 0.4em
+}
+
+.navplay>div>p {
+   color: rgb(150, 150, 150);
+   line-height: 1;
+}
+
+.navplay:hover {
+   background: rgb(245, 245, 245);
+}
+
+@keyframes showright {
+   from {
+      opacity: 0;
+      transform: translateX(3em)
+   }
+
+   to {
+      opacity: 1;
+      transform: translateX(0em)
+   }
+}
+
+.wrapTable {
+   animation: showright 1s ease;
+}
