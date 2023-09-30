@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/fontawesome.min.css');
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -17,11 +18,23 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: #272829;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0.1em);
+  }
+
+  50% {
+    transform: translateY(-0.3em);
+  }
+
+  100% {
+    transform: translateY(0.1em);
+  }
+}
+
+.loadinganimate {
+  animation: bounce 2s infinite;
 }
