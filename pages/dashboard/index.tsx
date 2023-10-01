@@ -117,7 +117,7 @@ export default function Dashboard() {
                   />
                ) : false
             }
-            <div className={"w-[20em]"}>
+            <div className={"w-[23em]"}>
                { /* menampilkan info site  */
                   activeTab != 3 && displayedData != undefined && displayedData.site != '' ?
                      (

@@ -1,4 +1,4 @@
-export const nav = "p-[0.2em] bg-slate-100 flex text-center border border-slate-300"
+export const nav = "p-[0.2em] bg-slate-100 flex text-center border border-slate-300 gap-[0.5em]"
 export const header = "flex items-center p-[1.5em] pb-0 px-10 justify-between"
 export const content = "flex min-h-[800px] gap-[1em] items-center p-2 py-0"
 export const tablecenter = "flex-1"

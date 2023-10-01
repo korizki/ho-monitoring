@@ -3,10 +3,16 @@
    color: rgb(150, 150, 150);
    border-radius: 0.4em;
    flex: 1;
+   transition: all 0.3s ease;
    font-size: 1.2em;
 }
 
-.navActive {
+.navButton:hover {
+   background: rgb(220, 220, 220);
+}
+
+.navActive,
+.navActive:hover {
    background: #4E4FEB;
    /*ungu*/
    color: white
