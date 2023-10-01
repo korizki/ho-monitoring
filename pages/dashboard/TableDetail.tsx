@@ -8,10 +8,11 @@ interface ListData {
 }
 
 export default function TableDetail({ data }: any) {
-   const [listUnitType, setListUnitType] = useState<string[]>([])
+   const [listUnitType, setListUnitType] = useState<any[]>([])
    const [listDisplayedData, setListDisplayedData] = useState<object[]>([])
    const processData = (data: any) => {
-      let listUnitType = _.uniq(_.map(data.data, 'type'))
+      let listUnitType = _.uniq(data.data.map((it: any) => it.total_unit > 0 ? it.type : ''))
+      listUnitType = listUnitType.filter(it => it != '')
       setListUnitType(listUnitType)
       let dataDisplayed = listUnitType.map(type => {
          return {
@@ -73,7 +74,7 @@ const TableBody = (props: any) => {
          return countOnFormula.toFixed(2)
       } else if (dataType == 'rasio') {
          let countOnFormula = _.sumBy(filtered.data, 'dt_sch') / (_.sumBy(filtered.data, 'dt_all')) * 100
-         return countOnFormula.toFixed(2)
+         return isNaN(countOnFormula) ? 0 : countOnFormula.toFixed(2)
       }
       return (_.sumBy(filtered.data, dataType)).toLocaleString('id-ID')
    }
@@ -87,7 +88,7 @@ const TableBody = (props: any) => {
                      <td>{row.total_unit}</td>
                      <td>{row.mohh}</td>
                      <td>{(row.dt_unsch + row.dt_sch).toFixed(2)}</td>
-                     <td>{ }</td>
+                     <td>{(row.dt_sch / row.dt_all * 100).toFixed(2)}</td>
                      <td>{row.mttr}</td>
                      <td>{row.mtbf}</td>
                      <td>{row.pa}</td>
