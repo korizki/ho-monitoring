@@ -4,6 +4,8 @@ import * as MyType from '../../misc/customType'
 import * as style from './style'
 import elstyle from '../../styles/dashboard/index.module.css'
 import $ from 'jquery'
+import 'daterangepicker/daterangepicker.css'
+import 'daterangepicker/daterangepicker.js'
 import { useState, useEffect } from 'react'
 import _ from 'lodash'
 import Navbar from './Navbar'
@@ -14,6 +16,7 @@ import { faChevronLeft, faChevronRight, faPlay, faPause } from '@fortawesome/fre
 export default function Dashboard() {
    let listSite = process.env.NEXT_PUBLIC_LIST_SITE ? process.env.NEXT_PUBLIC_LIST_SITE.split(",") : []
    const [listData, setListData] = useState<MyType.DataMachine[]>([])
+   const [storageData, setStorageData] = useState<MyType.DataMachine[]>([])
    const [isSubmit, setIsSubmit] = useState<Boolean>(true)
    const [indexDisplay, setIndexDisplay] = useState<any>(0)
    const [isAutoPlay, setIsAutoPlay] = useState(true)
@@ -57,38 +60,39 @@ export default function Dashboard() {
       }
    }
    useEffect(() => {
-      if (isAutoPlay) {
-         let listDataSite = _.map(listData, 'site')
-         let isExistAll = listSite.map(it => listDataSite.includes(it))
-         if (isExistAll.every(it => it == true)) {
-            let sortedData = listSite.map((item) => {
-               let filteredData = listData.filter(site => site.site == item)
-               return filteredData[0]
-            })
-            setDisplayedData({ site: '', data: [] })
-            setTimeout(() => {
-               setDisplayedData(sortedData[indexDisplay])
-            }, 500)
+      if (storageData.length == listSite.length) {
+         setDisplayedData({ site: '', data: [] })
+         setTimeout(() => {
+            setDisplayedData(storageData[indexDisplay])
+         }, 100)
+         if (isAutoPlay) {
+            setTimeout(() => handleUpdateIndex('next', indexDisplay, 1), 20000)
          }
       }
-   }, [listData, indexDisplay, isAutoPlay])
+   }, [storageData, indexDisplay, isAutoPlay])
    useEffect(() => {
-      if (isAutoPlay) {
-         setTimeout(() => handleUpdateIndex('next', indexDisplay, 1), 10000)
+      let listAllSite = _.uniq(_.map(listData, 'site'))
+      if (listAllSite.length == listSite.length) {
+         let newArr: any = listSite.map((it: any) => {
+            let filtered = listData.find(data => data.site == it)
+            return filtered
+         })
+         setStorageData(newArr)
       }
-   }, [isAutoPlay, indexDisplay])
-   useEffect(() => {
-   }, [displayedData])
+   }, [listData])
    useEffect(() => {
       if (isSubmit) {
          getDataFromEndPoint(listSite, periode)
          setIsSubmit(false)
       }
-   }, [isSubmit])
+   }, [isSubmit, periode])
    return (
       <div>
          {showLoading ? (<LoadingForm />) : false}
-         <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+         <Navbar
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+         />
          <div className={style.header}>
             <div className={elstyle.header}>
                {
@@ -99,29 +103,39 @@ export default function Dashboard() {
                   ) :
                      (<h1>Machine Condition (All Site)</h1>)
                }
-               <p>Periode data <strong>{periode.startDate}</strong> s/d <strong>{periode.endDate}.</strong>
-                  <a href=""> Ubah Periode.</a>
+               <p>
+                  Periode data <strong>{periode.startDate}</strong> s/d <strong>{periode.endDate}.</strong>
+                  <a href="#"> Ubah Periode.</a>
                </p>
+               <DatePicker setPeriode={setPeriode} setIsSubmit={setIsSubmit} />
             </div>
             { /* navigasi play or pause auto play */
                activeTab == 1 ? (
-                  <PlayNavigation auto={isAutoPlay} setPlay={setIsAutoPlay} />
+                  <PlayNavigation
+                     auto={isAutoPlay}
+                     setPlay={setIsAutoPlay}
+                  />
                ) : false
             }
             <div className={"w-[20em]"}>
                { /* menampilkan info site  */
-                  activeTab != 3 && displayedData != undefined && displayedData.site != '' ? (<SiteIcon site={displayedData.site} />) : (
-                     <h1>All Site</h1>
-                  )
+                  activeTab != 3 && displayedData != undefined && displayedData.site != '' ?
+                     (
+                        <SiteIcon site={displayedData.site} />
+                     ) :
+                     (
+                        <h1>All Site</h1>
+                     )
                }
             </div>
          </div>
          {
             activeTab == 1 ? (
                <ContentDetailSite
-                  handleUpdateIndex={handleUpdateIndex}
                   displayedData={displayedData}
+                  isAutoPlay={isAutoPlay}
                   indexDisplay={indexDisplay}
+                  handleUpdateIndex={handleUpdateIndex}
                />
             ) : false
          }
@@ -129,12 +143,58 @@ export default function Dashboard() {
       </div >
    )
 }
+const DatePicker = ({ setPeriode, setIsSubmit }: any) => {
+   const generateCustomRange = () => {
+      let year = new Date().getFullYear()
+      let month = new Date().getMonth()
+      let list = [
+         { name: 'Januari', value: [`01/01/${year}`, `01/31/${year}`] },
+         { name: 'Februari', value: [`02/01/${year}`, `02/28/${year}`] },
+         { name: 'Maret', value: [`03/01/${year}`, `03/31/${year}`] },
+         { name: 'April', value: [`04/01/${year}`, `04/30/${year}`] },
+         { name: 'Mei', value: [`05/01/${year}`, `05/31/${year}`] },
+         { name: 'Juni', value: [`06/01/${year}`, `06/30/${year}`] },
+         { name: 'Juli', value: [`07/01/${year}`, `07/31/${year}`] },
+         { name: 'Agustus', value: [`08/01/${year}`, `08/31/${year}`] },
+         { name: 'September', value: [`09/01/${year}`, `09/30/${year}`] },
+         { name: 'Oktober', value: [`10/01/${year}`, `10/31/${year}`] },
+         { name: 'November', value: [`11/01/${year}`, `11/30/${year}`] },
+         { name: 'Desember', value: [`12/01/${year}`, `12/31/${year}`] },
+      ]
+      let newList: any = list.slice(month > 6 ? (month - 6) : 0, month)
+
+      let newObj: MyType.DateObject = {}
+      newList.forEach((it: MyType.DateObject) => {
+         Object.assign(newObj, { [it.name]: it.value })
+      })
+      return newObj
+   }
+   useEffect(() => {
+      // @ts-ignore
+      $('input[name="daterange"]').daterangepicker({
+         opens: 'left',
+         ranges: generateCustomRange(),
+      }, function (start: any, end: any) {
+         setPeriode({
+            startDate: start.format('YYYY-MM-DD'),
+            endDate: end.format('YYYY-MM-DD'),
+         })
+         setIsSubmit(true)
+      })
+   }, [])
+   return (
+      <div className="absolute right-0 w-[7em] bottom-[0.2em] opacity-0">
+         <input name="daterange" className="cursor-pointer" />
+      </div>
+   )
+}
 const ContentDetailSite = (props: any) => {
-   const { handleUpdateIndex, displayedData, indexDisplay } = props
+   const { displayedData, isAutoPlay, handleUpdateIndex, indexDisplay } = props
    return (
       <div className={`${style.content} ${elstyle.contentcenter}`}>
          <a
             href="#"
+            className={`${isAutoPlay ? 'opacity-0 z-[-1]' : 'opacity-1 z-[1]'}`}
             title="Previous Site"
             onClick={() => handleUpdateIndex('prev', indexDisplay, 1)}
          >
@@ -146,6 +206,7 @@ const ContentDetailSite = (props: any) => {
          <a
             href="#"
             title="Next Site"
+            className={`${isAutoPlay ? 'opacity-0 z-[-1]' : 'opacity-1 z-[1]'}`}
             onClick={() => handleUpdateIndex('next', indexDisplay, 1)}
          >
             <FontAwesomeIcon icon={faChevronRight} />

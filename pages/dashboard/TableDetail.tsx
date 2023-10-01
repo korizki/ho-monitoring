@@ -22,7 +22,9 @@ export default function TableDetail({ data }: any) {
       setListDisplayedData(dataDisplayed)
    }
    useEffect(() => {
-      processData(data)
+      if (data != undefined) {
+         processData(data)
+      }
    }, [data])
    return (
       <div className={`${style.wrapTableData}`}>

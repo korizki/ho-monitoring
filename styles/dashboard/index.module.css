@@ -15,7 +15,7 @@
 .header>h1,
 .header~div>h1,
 .rightcont>div>h1 {
-   font-size: 1.7em;
+   font-size: 1.8em;
    font-weight: 600;
 }
 
@@ -38,7 +38,12 @@
 .header>p {
    /*abu*/
    color: #61677A;
+   font-size: 1.1em;
    margin-top: 0.2em;
+}
+
+.header {
+   position: relative
 }
 
 .header>p>strong,
@@ -46,14 +51,27 @@
    color: #4E4FEB;
 }
 
+@keyframes showleft {
+   from {
+      opacity: 0;
+      transform: translateY(-1.5em)
+   }
+
+   to {
+      opacity: 1;
+      transform: translateY(0em)
+   }
+}
+
 .rightcont {
    display: flex;
+   animation: showleft 0.8s ease;
    align-items: center;
    gap: 1.5em;
 }
 
 .rightcont>img {
-   height: 3em
+   height: 4em
 }
 
 .contentcenter>a {

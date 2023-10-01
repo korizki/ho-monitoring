@@ -14,3 +14,7 @@ export interface NavbarProps {
    activeTab: number,
    setActiveTab: any
 }
+export interface DateObject {
+   name?: any,
+   value?: string[]
+}
