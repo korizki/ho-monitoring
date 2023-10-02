@@ -48,6 +48,7 @@ export default function Dashboard() {
    const [manualChange, setManualChange] = useState('')
    const [isAutoPlay, setIsAutoPlay] = useState(true)
    const [displayedData, setDisplayedData] = useState<MyType.DataMachine>({ site: '', data: [] })
+   const [lastDisplayedData, setLastDisplayedData] = useState({ site: '', data: [] })
    const [periode, setPeriode] = useState({
       startDate: startDateState,
       endDate: endDateState,
@@ -86,17 +87,19 @@ export default function Dashboard() {
          }
       }
    }
+   const updateDataDisplayed = (storageData: any, indexDisplay: number, play: boolean, manual: string) => {
+      if (play || manual != '') {
+         setDisplayedData(storageData[indexDisplay])
+         setLastDisplayedData(storageData[indexDisplay])
+      }
+   }
    useEffect(() => {
       if (storageData.length == listSite.length) {
          setDisplayedData({ site: '', data: [] })
-         const myInterval = setTimeout(() => handleUpdateIndex('next', indexDisplay, (!isAutoPlay ? 0 : 1)), 10000)
          if (isAutoPlay || manualChange != '') {
-            setTimeout(() => {
-               setDisplayedData(storageData[indexDisplay])
-            }, 100)
-         }
-         if (!isAutoPlay) {
-            clearTimeout(myInterval)
+            setManualChange('')
+            setTimeout(() => { updateDataDisplayed(storageData, indexDisplay, isAutoPlay, manualChange) }, 100)
+            setTimeout(() => handleUpdateIndex('next', indexDisplay, (!isAutoPlay ? 0 : 1)), 20000)
          }
       }
    }, [storageData, indexDisplay, isAutoPlay, manualChange])
@@ -149,13 +152,11 @@ export default function Dashboard() {
             }
             <div className={"w-[23em]"}>
                { /* menampilkan info site  */
-                  activeTab != 3 && displayedData != undefined && displayedData.site != '' ?
-                     (
-                        <SiteIcon site={displayedData.site} />
-                     ) :
-                     (
-                        <h1></h1>
-                     )
+                  activeTab != 3 && (displayedData != undefined) && (displayedData.site != '' && isAutoPlay) ?
+                     (<SiteIcon site={displayedData.site} />) : false
+               }
+               {
+                  activeTab != 3 && (!isAutoPlay) ? (<SiteIcon site={lastDisplayedData.site} />) : false
                }
             </div>
          </div>
@@ -167,6 +168,8 @@ export default function Dashboard() {
                   indexDisplay={indexDisplay}
                   handleUpdateIndex={handleUpdateIndex}
                   setManualChange={setManualChange}
+                  lastDisplayedData={lastDisplayedData}
+                  manualChange={manualChange}
                />
             ) : false
          }
@@ -204,7 +207,7 @@ const DatePicker = ({ setPeriode, setIsSubmit, list }: any) => {
    )
 }
 const ContentDetailSite = (props: any) => {
-   const { displayedData, isAutoPlay, handleUpdateIndex, indexDisplay, setManualChange } = props
+   const { displayedData, isAutoPlay, handleUpdateIndex, indexDisplay, setManualChange, manualChange, lastDisplayedData } = props
    return (
       <div className={`${style.content} ${elstyle.contentcenter}`}>
          <a
@@ -219,7 +222,7 @@ const ContentDetailSite = (props: any) => {
             <FontAwesomeIcon icon={faChevronLeft} />
          </a>
          <div className={`${style.tablecenter}`}>
-            <TableDetail data={displayedData} />
+            <TableDetail data={isAutoPlay && manualChange == '' ? displayedData : lastDisplayedData} />
          </div>
          <a
             href="#"
@@ -263,7 +266,9 @@ const SiteIcon = ({ site }: any) => {
    }
    return (
       <div className={elstyle.rightcont}>
-         <img src={`./logo_site/${site}.png`} />
+         {
+            site != '' ? (<img src={`./logo_site/${site}.png`} />) : false
+         }
          <div>
             <h1>SITE {site}</h1>
             <p>{getSiteName(site)}</p>
