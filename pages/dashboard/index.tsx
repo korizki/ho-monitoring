@@ -12,18 +12,46 @@ import Navbar from './Navbar'
 import TableDetail from './TableDetail'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight, faPlay, faPause } from '@fortawesome/free-solid-svg-icons'
-
+const date = new Date().getDate()
+const month = new Date().getMonth()
+const year = new Date().getFullYear()
+let listPeriodeYear = [
+   { name: 'Januari', value: [`01/01/${year}`, `01/31/${year}`] },
+   { name: 'Februari', value: [`02/01/${year}`, `02/28/${year}`] },
+   { name: 'Maret', value: [`03/01/${year}`, `03/31/${year}`] },
+   { name: 'April', value: [`04/01/${year}`, `04/30/${year}`] },
+   { name: 'Mei', value: [`05/01/${year}`, `05/31/${year}`] },
+   { name: 'Juni', value: [`06/01/${year}`, `06/30/${year}`] },
+   { name: 'Juli', value: [`07/01/${year}`, `07/31/${year}`] },
+   { name: 'Agustus', value: [`08/01/${year}`, `08/31/${year}`] },
+   { name: 'September', value: [`09/01/${year}`, `09/30/${year}`] },
+   { name: 'Oktober', value: [`10/01/${year}`, `10/31/${year}`] },
+   { name: 'November', value: [`11/01/${year}`, `11/30/${year}`] },
+   { name: 'Desember', value: [`12/01/${year}`, `12/31/${year}`] },
+]
+let startDateState = ''
+let endDateState = ''
+if (date < 4) {
+   startDateState = new Date(listPeriodeYear[month - 1].value[0]).toLocaleDateString('fr-CA')
+   endDateState = new Date(listPeriodeYear[month - 1].value[1]).toLocaleDateString('fr-CA')
+} else {
+   startDateState = new Date(`${year}-${month + 1}-01`).toLocaleDateString('fr-CA')
+   endDateState = new Date().toLocaleDateString('fr-CA')
+}
+// default component
 export default function Dashboard() {
    let listSite = process.env.NEXT_PUBLIC_LIST_SITE ? process.env.NEXT_PUBLIC_LIST_SITE.split(",") : []
    const [listData, setListData] = useState<MyType.DataMachine[]>([])
    const [storageData, setStorageData] = useState<MyType.DataMachine[]>([])
    const [isSubmit, setIsSubmit] = useState<Boolean>(true)
    const [indexDisplay, setIndexDisplay] = useState<any>(0)
+   const [manualChange, setManualChange] = useState('')
    const [isAutoPlay, setIsAutoPlay] = useState(true)
    const [displayedData, setDisplayedData] = useState<MyType.DataMachine>({ site: '', data: [] })
+   const [lastDisplayedData, setLastDisplayedData] = useState({ site: '', data: [] })
    const [periode, setPeriode] = useState({
-      startDate: '2023-09-01',
-      endDate: '2023-09-20',
+      startDate: startDateState,
+      endDate: endDateState,
    })
    const [showLoading, setShowLoading] = useState(false)
    const [activeTab, setActiveTab] = useState(1)
@@ -59,17 +87,22 @@ export default function Dashboard() {
          }
       }
    }
+   const updateDataDisplayed = (storageData: any, indexDisplay: number, play: boolean, manual: string) => {
+      if (play || manual != '') {
+         setDisplayedData(storageData[indexDisplay])
+         setLastDisplayedData(storageData[indexDisplay])
+      }
+   }
    useEffect(() => {
       if (storageData.length == listSite.length) {
          setDisplayedData({ site: '', data: [] })
-         setTimeout(() => {
-            setDisplayedData(storageData[indexDisplay])
-         }, 100)
-         if (isAutoPlay) {
-            setTimeout(() => handleUpdateIndex('next', indexDisplay, 1), 20000)
+         if (isAutoPlay || manualChange != '') {
+            setManualChange('')
+            setTimeout(() => { updateDataDisplayed(storageData, indexDisplay, isAutoPlay, manualChange) }, 100)
+            setTimeout(() => handleUpdateIndex('next', indexDisplay, (!isAutoPlay ? 0 : 1)), 20000)
          }
       }
-   }, [storageData, indexDisplay, isAutoPlay])
+   }, [storageData, indexDisplay, isAutoPlay, manualChange])
    useEffect(() => {
       let listAllSite = _.uniq(_.map(listData, 'site'))
       if (listAllSite.length == listSite.length) {
@@ -107,7 +140,7 @@ export default function Dashboard() {
                   Periode data <strong>{periode.startDate}</strong> s/d <strong>{periode.endDate}.</strong>
                   <a href="#"> Ubah Periode.</a>
                </p>
-               <DatePicker setPeriode={setPeriode} setIsSubmit={setIsSubmit} />
+               <DatePicker setPeriode={setPeriode} setIsSubmit={setIsSubmit} list={listPeriodeYear} />
             </div>
             { /* navigasi play or pause auto play */
                activeTab == 1 ? (
@@ -119,13 +152,11 @@ export default function Dashboard() {
             }
             <div className={"w-[23em]"}>
                { /* menampilkan info site  */
-                  activeTab != 3 && displayedData != undefined && displayedData.site != '' ?
-                     (
-                        <SiteIcon site={displayedData.site} />
-                     ) :
-                     (
-                        <h1>All Site</h1>
-                     )
+                  activeTab != 3 && (displayedData != undefined) && (displayedData.site != '' && isAutoPlay) ?
+                     (<SiteIcon site={displayedData.site} />) : false
+               }
+               {
+                  activeTab != 3 && (!isAutoPlay) ? (<SiteIcon site={lastDisplayedData.site} />) : false
                }
             </div>
          </div>
@@ -136,6 +167,9 @@ export default function Dashboard() {
                   isAutoPlay={isAutoPlay}
                   indexDisplay={indexDisplay}
                   handleUpdateIndex={handleUpdateIndex}
+                  setManualChange={setManualChange}
+                  lastDisplayedData={lastDisplayedData}
+                  manualChange={manualChange}
                />
             ) : false
          }
@@ -143,26 +177,10 @@ export default function Dashboard() {
       </div >
    )
 }
-const DatePicker = ({ setPeriode, setIsSubmit }: any) => {
+const DatePicker = ({ setPeriode, setIsSubmit, list }: any) => {
    const generateCustomRange = () => {
-      let year = new Date().getFullYear()
       let month = new Date().getMonth()
-      let list = [
-         { name: 'Januari', value: [`01/01/${year}`, `01/31/${year}`] },
-         { name: 'Februari', value: [`02/01/${year}`, `02/28/${year}`] },
-         { name: 'Maret', value: [`03/01/${year}`, `03/31/${year}`] },
-         { name: 'April', value: [`04/01/${year}`, `04/30/${year}`] },
-         { name: 'Mei', value: [`05/01/${year}`, `05/31/${year}`] },
-         { name: 'Juni', value: [`06/01/${year}`, `06/30/${year}`] },
-         { name: 'Juli', value: [`07/01/${year}`, `07/31/${year}`] },
-         { name: 'Agustus', value: [`08/01/${year}`, `08/31/${year}`] },
-         { name: 'September', value: [`09/01/${year}`, `09/30/${year}`] },
-         { name: 'Oktober', value: [`10/01/${year}`, `10/31/${year}`] },
-         { name: 'November', value: [`11/01/${year}`, `11/30/${year}`] },
-         { name: 'Desember', value: [`12/01/${year}`, `12/31/${year}`] },
-      ]
       let newList: any = list.slice(month > 6 ? (month - 6) : 0, month)
-
       let newObj: MyType.DateObject = {}
       newList.forEach((it: MyType.DateObject) => {
          Object.assign(newObj, { [it.name]: it.value })
@@ -189,25 +207,31 @@ const DatePicker = ({ setPeriode, setIsSubmit }: any) => {
    )
 }
 const ContentDetailSite = (props: any) => {
-   const { displayedData, isAutoPlay, handleUpdateIndex, indexDisplay } = props
+   const { displayedData, isAutoPlay, handleUpdateIndex, indexDisplay, setManualChange, manualChange, lastDisplayedData } = props
    return (
       <div className={`${style.content} ${elstyle.contentcenter}`}>
          <a
             href="#"
             className={`${isAutoPlay ? 'opacity-0 z-[-1]' : 'opacity-1 z-[1]'}`}
             title="Previous Site"
-            onClick={() => handleUpdateIndex('prev', indexDisplay, 1)}
+            onClick={() => {
+               setManualChange('lanjut')
+               handleUpdateIndex('prev', indexDisplay, 1)
+            }}
          >
             <FontAwesomeIcon icon={faChevronLeft} />
          </a>
          <div className={`${style.tablecenter}`}>
-            <TableDetail data={displayedData} />
+            <TableDetail data={isAutoPlay && manualChange == '' ? displayedData : lastDisplayedData} />
          </div>
          <a
             href="#"
             title="Next Site"
             className={`${isAutoPlay ? 'opacity-0 z-[-1]' : 'opacity-1 z-[1]'}`}
-            onClick={() => handleUpdateIndex('next', indexDisplay, 1)}
+            onClick={() => {
+               setManualChange('lanjut')
+               handleUpdateIndex('next', indexDisplay, 1)
+            }}
          >
             <FontAwesomeIcon icon={faChevronRight} />
          </a>
@@ -242,7 +266,9 @@ const SiteIcon = ({ site }: any) => {
    }
    return (
       <div className={elstyle.rightcont}>
-         <img src={`./logo_site/${site}.png`} />
+         {
+            site != '' ? (<img src={`./logo_site/${site}.png`} />) : false
+         }
          <div>
             <h1>SITE {site}</h1>
             <p>{getSiteName(site)}</p>

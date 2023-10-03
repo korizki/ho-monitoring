@@ -86,7 +86,7 @@ const TableBody = (props: any) => {
                   <tr key={index}>
                      <td>{row.model}</td>
                      <td>{row.total_unit}</td>
-                     <td>{row.mohh}</td>
+                     <td>{row.mohh.toLocaleString('id-ID')}</td>
                      <td>{(row.dt_unsch + row.dt_sch).toFixed(2)}</td>
                      <td>{(row.dt_sch / row.dt_all * 100).toFixed(2)}</td>
                      <td>{row.mttr}</td>
