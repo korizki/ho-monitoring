@@ -160,6 +160,44 @@ export default function Dashboard() {
                }
             </div>
          </div>
+         { /* legend icon */
+            activeTab == 1 ? (
+               <div className={`${style.header} pt-[4em] pb-[1em] justify-center`}>
+                  <div className="flex gap-[1em] items-center">
+                     <img src="./Model.svg" width="40" />
+                     <p className="text-[1.3em] text-slate-600 font-semibold">Model</p>
+                  </div>
+                  <div className="flex gap-[1em] items-center">
+                     <img src="./Quantitiy.svg" width="40" />
+                     <p className="text-[1.3em] text-slate-600 font-semibold">Quantity</p>
+                  </div>
+                  <div className="flex gap-[1em] items-center">
+                     <img src="./MOHH.svg" width="40" />
+                     <p className="text-[1.3em] text-slate-600 font-semibold">MOHH</p>
+                  </div>
+                  <div className="flex gap-[1em] items-center">
+                     <img src="./Downtime.svg" width="40" />
+                     <p className="text-[1.3em] text-slate-600 font-semibold">Downtime</p>
+                  </div>
+                  <div className="flex gap-[1em] items-center">
+                     <img src="./Rasio RS.svg" width="40" />
+                     <p className="text-[1.3em] text-slate-600 font-semibold">Rasio BS</p>
+                  </div>
+                  <div className="flex gap-[1em] items-center">
+                     <img src="./MTTR.svg" width="40" />
+                     <p className="text-[1.3em] text-slate-600 font-semibold">MTTR</p>
+                  </div>
+                  <div className="flex gap-[1em] items-center">
+                     <img src="./MTBR.svg" width="40" />
+                     <p className="text-[1.3em] text-slate-600 font-semibold">MTBF</p>
+                  </div>
+                  <div className="flex gap-[1em] items-center">
+                     <img src="./PA.svg" width="40" />
+                     <p className="text-[1.3em] text-slate-600 font-semibold">PA</p>
+                  </div>
+               </div>
+            ) : false
+         }
          {
             activeTab == 1 ? (
                <ContentDetailSite

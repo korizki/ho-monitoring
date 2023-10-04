@@ -1,6 +1,6 @@
 export const nav = "p-[0.2em] bg-slate-100 flex text-center border border-slate-300 gap-[0.5em]"
 export const header = "flex items-center p-[1.5em] pb-0 px-10 justify-between"
-export const content = "flex min-h-[800px] gap-[1em] items-center p-2 py-0"
+export const content = "flex min-h-[500px] gap-[1em] items-center p-2 py-0"
 export const tablecenter = "flex-1"
 export const loading = "flex absolute z-20 top-0 left-0 flex justify-center items-center w-full h-full bg-[rgba(30,30,30,0.9)] "
 export const wrapTableData = "flex flex-wrap h-full"
