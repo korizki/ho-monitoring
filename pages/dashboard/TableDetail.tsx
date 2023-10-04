@@ -37,14 +37,14 @@ export default function TableDetail({ data }: any) {
                      <table className={elstyle.mapsummary}>
                         <thead>
                            <tr>
-                              <th>Model</th>
-                              <th>Quantity</th>
-                              <th>MOHH</th>
-                              <th>Downtime</th>
-                              <th>Rasio BS</th>
-                              <th>MTTR</th>
-                              <th>MTBF</th>
-                              <th>PA</th>
+                              <th title="Model"><img src="./Model.svg" width="50" /></th>
+                              <th title="Quantity"><img src="./Quantitiy.svg" width="50" /></th>
+                              <th title="MOHH"><img src="./MOHH.svg" width="50" /></th>
+                              <th title="Downtime"><img src="./Downtime.svg" width="50" /></th>
+                              <th title="Rasio BS"><img src="./Rasio RS.svg" width="50" /></th>
+                              <th title="MTTR"><img src="./MTTR.svg" width="50" /></th>
+                              <th title="MTBF"><img src="./MTBR.svg" width="50" /></th>
+                              <th title="PA"><img src="./PA.svg" width="50" /></th>
                            </tr>
                         </thead>
                         <TableBody data={listDisplayedData} type={type} />
