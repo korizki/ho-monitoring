@@ -18,3 +18,7 @@ export interface DateObject {
    name?: any,
    value?: string[]
 }
+export interface DataTopBD {
+   site?: string,
+   data?: any[]
+}

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import * as MyType from '../../misc/customType'
 import * as style from './style'
 import elstyle from '../../styles/dashboard/index.module.css'
 import _ from 'lodash'
@@ -23,6 +22,7 @@ export default function TableDetail({ data }: any) {
       setListDisplayedData(dataDisplayed)
    }
    useEffect(() => {
+      // console.log(data)
       if (data != undefined) {
          processData(data)
       }
@@ -83,8 +83,8 @@ const TableBody = (props: any) => {
          {data.filter((it: any) => it.type == type)[0].data.map((row: any, index: number) => {
             if (row.total_unit != 0 && showDetail) {
                return (
-                  <tr key={index}>
-                     <td>{row.model}</td>
+                  <tr className="hover:bg-slate-100" key={index}>
+                     <td >{row.model}</td>
                      <td>{row.total_unit}</td>
                      <td>{row.mohh.toLocaleString('id-ID')}</td>
                      <td>{(row.dt_unsch + row.dt_sch).toFixed(2)}</td>
@@ -96,7 +96,7 @@ const TableBody = (props: any) => {
                )
             }
          })}
-         <tr className="bg-slate-700 text-white cursor-pointer" title="Tampilkan detail">
+         <tr className="bg-slate-700 text-white cursor-pointer hover:bg-slate-700" title="Tampilkan detail">
             <td>TOTAL</td>
             <td>{getTotal(data, type, 'total_unit')}</td>
             <td>{getTotal(data, type, 'mohh')}</td>
