@@ -98,10 +98,44 @@
    border-bottom: 1px solid rgb(230, 230, 230);
 }
 
+.mainnav {
+   border-bottom: 1px solid rgb(230, 230, 230);
+   box-shadow: 2px 0 6px 0 rgb(240, 240, 240);
+}
+
 .mapsummary>thead>tr>th,
 .mapsummary>tbody>tr>td {
    padding: 0.5em 1em;
    text-align: center;
+}
+
+.togle {
+   background: rgb(240, 240, 240);
+   height: 2.7em;
+   padding: 0.35em 0.4em;
+   border-radius: 4em;
+   outline: 0.1em solid rgb(230, 230, 230);
+   display: inline-block;
+   cursor: pointer;
+}
+
+.togle>span {
+   width: 2em;
+   height: 2em;
+   display: inline-block;
+   border-radius: 20em;
+   background: rgb(180, 180, 180);
+   transition: all 0.3s ease;
+   transform: translateX(0em);
+}
+
+.togle>input {
+   cursor: pointer;
+   display: inline-block;
+   opacity: 0;
+   height: 2em;
+   width: 2em;
+   background: rgb(240, 240, 240);
 }
 
 .mapsummary>tbody>tr>td:first-child {

@@ -38,8 +38,8 @@ if (date < 4) {
    endDateState = new Date(listPeriodeYear[month - 1].value[1]).toLocaleDateString('fr-CA')
 } else {
    startDateState = new Date(`${year}-${month + 1}-01`).toLocaleDateString('fr-CA')
-   // endDateState = new Date().toLocaleDateString('fr-CA')
-   endDateState = '2023-10-06'
+   endDateState = new Date().toLocaleDateString('fr-CA')
+   // endDateState = '2023-10-06'
 }
 // default component
 export default function Dashboard() {
@@ -63,7 +63,7 @@ export default function Dashboard() {
       endDate: endDateState,
    })
    const [showLoading, setShowLoading] = useState(false)
-   const [activeTab, setActiveTab] = useState(2)
+   const [activeTab, setActiveTab] = useState(1)
    // get data detail machine condition each site
    const getDataFromEndPoint = (listSite: string[], periode: MyType.Periode) => {
       setShowLoading(true)

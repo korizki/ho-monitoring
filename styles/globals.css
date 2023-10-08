@@ -21,6 +21,51 @@ body {
   color: #272829;
 }
 
+.centertext {
+  text-align: center !important;
+}
+
+.active-toolbar {
+  transform: translateX(2em) !important;
+  background: #4E4FEB !important;
+}
+
+.footer {
+  background: #FC2947;
+  color: white;
+  border-top: 1px solid rgb(230, 230, 230);
+  box-shadow: -2px 0 6px 0px rgb(240, 240, 240);
+}
+
+.links {
+  transition: all 0.3s ease;
+  outline: 1px solid rgb(240, 240, 240);
+  padding: 1.2em 2em;
+  border-radius: 3em;
+  background: #FC2947;
+  color: white;
+  box-shadow: 2px 2px 1em 0 rgb(230, 230, 230);
+}
+
+.links>p {
+  display: flex;
+  align-items: center;
+  gap: 1.2em
+}
+
+.links span {
+  font-weight: 600;
+}
+
+.links>p>i {
+  font-size: 2em;
+}
+
+.links:hover {
+  transform: translateY(-0.3em);
+  box-shadow: 0px 0px 3em 0 rgb(180, 180, 180);
+}
+
 @keyframes bounce {
   0% {
     transform: translateY(0.1em);
