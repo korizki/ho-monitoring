@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import * as MyType from '../../misc/customType'
 import * as style from './style'
 import elstyle from '../../styles/dashboard/index.module.css'
 import _ from 'lodash'
@@ -23,6 +22,7 @@ export default function TableDetail({ data }: any) {
       setListDisplayedData(dataDisplayed)
    }
    useEffect(() => {
+      // console.log(data)
       if (data != undefined) {
          processData(data)
       }

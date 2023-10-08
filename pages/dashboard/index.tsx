@@ -9,6 +9,8 @@ import 'daterangepicker/daterangepicker.js'
 import { useState, useEffect } from 'react'
 import _ from 'lodash'
 import Navbar from './Navbar'
+import SiteIcon from './SiteIcon'
+import TopBDContent from './TopBD'
 import TableDetail from './TableDetail'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight, faPlay, faPause } from '@fortawesome/free-solid-svg-icons'
@@ -36,25 +38,33 @@ if (date < 4) {
    endDateState = new Date(listPeriodeYear[month - 1].value[1]).toLocaleDateString('fr-CA')
 } else {
    startDateState = new Date(`${year}-${month + 1}-01`).toLocaleDateString('fr-CA')
-   endDateState = new Date().toLocaleDateString('fr-CA')
+   // endDateState = new Date().toLocaleDateString('fr-CA')
+   endDateState = '2023-10-06'
 }
 // default component
 export default function Dashboard() {
    let listSite = process.env.NEXT_PUBLIC_LIST_SITE ? process.env.NEXT_PUBLIC_LIST_SITE.split(",") : []
+   // state tab detail / tab 1
    const [listData, setListData] = useState<MyType.DataMachine[]>([])
    const [storageData, setStorageData] = useState<MyType.DataMachine[]>([])
+   const [displayedData, setDisplayedData] = useState<MyType.DataMachine>({ site: '', data: [] })
+   const [lastDisplayedData, setLastDisplayedData] = useState({ site: '', data: [] })
    const [isSubmit, setIsSubmit] = useState<Boolean>(true)
+   // state tab top bd frequent / tab 2
+   const [listDataTopBD, setListDataTopBD] = useState<any>([])
+   const [storageDataTopBD, setStorageDataTopBD] = useState<MyType.DataTopBD[]>([])
+   const [selectedSiteTopBD, setSelectedSiteTopBD] = useState('MHU')
+   // other state
    const [indexDisplay, setIndexDisplay] = useState<any>(0)
    const [manualChange, setManualChange] = useState('')
    const [isAutoPlay, setIsAutoPlay] = useState(true)
-   const [displayedData, setDisplayedData] = useState<MyType.DataMachine>({ site: '', data: [] })
-   const [lastDisplayedData, setLastDisplayedData] = useState({ site: '', data: [] })
    const [periode, setPeriode] = useState({
       startDate: startDateState,
       endDate: endDateState,
    })
    const [showLoading, setShowLoading] = useState(false)
-   const [activeTab, setActiveTab] = useState(1)
+   const [activeTab, setActiveTab] = useState(2)
+   // get data detail machine condition each site
    const getDataFromEndPoint = (listSite: string[], periode: MyType.Periode) => {
       setShowLoading(true)
       listSite.forEach((site: string, index) => {
@@ -72,6 +82,26 @@ export default function Dashboard() {
          })
       })
    }
+   // get data top Breakdown frequent
+   const getDataTopBD = (listSite: string[], periode: MyType.Periode) => {
+      listSite.forEach((it: string) => {
+         let site = it == 'ABP' ? 'amm-abp.net' : `ppa-${it.toLowerCase()}.net`
+         $.ajax({
+            url: `https://api22.${site}/v1/bd/topBreakdown?startDate=${periode.startDate}&endDate=${periode.endDate}`,
+            method: 'GET',
+            success: data => {
+               setListDataTopBD((prev: MyType.DataTopBD[]) => {
+                  if (prev.length) {
+                     let filtered = prev.filter((it: any) => it.site != site)
+                     return [...filtered, { site: it, data: data.data }]
+                  }
+                  return [{ site: it, data: data.data }]
+               })
+            }
+         })
+      })
+   }
+   // handle on change index displaying Site Detail Machine Condition
    const handleUpdateIndex = (type: string, index: number, num: number) => {
       if (type == 'prev') {
          if (indexDisplay == 0) {
@@ -104,18 +134,29 @@ export default function Dashboard() {
       }
    }, [storageData, indexDisplay, isAutoPlay, manualChange])
    useEffect(() => {
+      let listDataSite: any = _.uniq(_.map(listDataTopBD, 'site'))
+      listDataSite = listDataSite.map((it: string) => {
+         let filtered: any = listDataTopBD.filter((data: MyType.DataTopBD) => data.site == it)
+         return filtered[filtered.length - 1]
+      })
+      setStorageDataTopBD(listDataSite)
+   }, [listDataTopBD])
+   useEffect(() => {
       let listAllSite = _.uniq(_.map(listData, 'site'))
       if (listAllSite.length == listSite.length) {
          let newArr: any = listSite.map((it: any) => {
-            let filtered = listData.find(data => data.site == it)
+            let filtered: any = listData.filter(data => data.site == it)
+            filtered = filtered[filtered.length - 1]
             return filtered
          })
          setStorageData(newArr)
       }
+
    }, [listData])
    useEffect(() => {
       if (isSubmit) {
          getDataFromEndPoint(listSite, periode)
+         getDataTopBD(listSite, periode)
          setIsSubmit(false)
       }
    }, [isSubmit, periode])
@@ -126,93 +167,94 @@ export default function Dashboard() {
             activeTab={activeTab}
             setActiveTab={setActiveTab}
          />
-         <div className={style.header}>
-            <div className={elstyle.header}>
-               {
-                  activeTab == 1 ? (
-                     <h1>Machine Condition (Detail Site) <i className="fa-solid fa-chevron-left"></i></h1>
-                  ) : activeTab == 2 ? (
-                     <h1>Top Breakdown Frequency</h1>
-                  ) :
-                     (<h1>Machine Condition (All Site)</h1>)
-               }
-               <p>
-                  Periode data <strong>{periode.startDate}</strong> s/d <strong>{periode.endDate}.</strong>
-                  <a href="#"> Ubah Periode.</a>
-               </p>
-               <DatePicker setPeriode={setPeriode} setIsSubmit={setIsSubmit} list={listPeriodeYear} />
-            </div>
-            { /* navigasi play or pause auto play */
-               activeTab == 1 ? (
-                  <PlayNavigation
-                     auto={isAutoPlay}
-                     setPlay={setIsAutoPlay}
-                  />
-               ) : false
-            }
-            <div className={"w-[23em]"}>
-               { /* menampilkan info site  */
-                  activeTab != 3 && (displayedData != undefined) && (displayedData.site != '' && isAutoPlay) ?
-                     (<SiteIcon site={displayedData.site} />) : false
-               }
-               {
-                  activeTab != 3 && (!isAutoPlay) ? (<SiteIcon site={lastDisplayedData.site} />) : false
-               }
-            </div>
-         </div>
-         { /* legend icon */
+         <Header
+            activeTab={activeTab}
+            periode={periode}
+            setPeriode={setPeriode}
+            setIsSubmit={setIsSubmit}
+            isAutoPlay={isAutoPlay}
+            setIsAutoPlay={setIsAutoPlay}
+            displayedData={displayedData}
+            lastDisplayedData={lastDisplayedData}
+            selectedSiteTopBD={selectedSiteTopBD}
+            listSite={listSite}
+            setSelectedSiteTopBD={setSelectedSiteTopBD}
+         />
+         { /* konten tab detail  */
             activeTab == 1 ? (
-               <div className={`${style.header} pt-[4em] pb-[1em] justify-center`}>
-                  <div className="flex gap-[1em] items-center">
-                     <img src="./Model.svg" width="40" />
-                     <p className="text-[1.3em] text-slate-600 font-semibold">Model</p>
-                  </div>
-                  <div className="flex gap-[1em] items-center">
-                     <img src="./Quantitiy.svg" width="40" />
-                     <p className="text-[1.3em] text-slate-600 font-semibold">Quantity</p>
-                  </div>
-                  <div className="flex gap-[1em] items-center">
-                     <img src="./MOHH.svg" width="40" />
-                     <p className="text-[1.3em] text-slate-600 font-semibold">MOHH</p>
-                  </div>
-                  <div className="flex gap-[1em] items-center">
-                     <img src="./Downtime.svg" width="40" />
-                     <p className="text-[1.3em] text-slate-600 font-semibold">Downtime</p>
-                  </div>
-                  <div className="flex gap-[1em] items-center">
-                     <img src="./Rasio RS.svg" width="40" />
-                     <p className="text-[1.3em] text-slate-600 font-semibold">Rasio BS</p>
-                  </div>
-                  <div className="flex gap-[1em] items-center">
-                     <img src="./MTTR.svg" width="40" />
-                     <p className="text-[1.3em] text-slate-600 font-semibold">MTTR</p>
-                  </div>
-                  <div className="flex gap-[1em] items-center">
-                     <img src="./MTBR.svg" width="40" />
-                     <p className="text-[1.3em] text-slate-600 font-semibold">MTBF</p>
-                  </div>
-                  <div className="flex gap-[1em] items-center">
-                     <img src="./PA.svg" width="40" />
-                     <p className="text-[1.3em] text-slate-600 font-semibold">PA</p>
-                  </div>
-               </div>
+               <>
+                  <LegendIcon />
+                  <ContentDetailSite
+                     displayedData={displayedData}
+                     isAutoPlay={isAutoPlay}
+                     indexDisplay={indexDisplay}
+                     handleUpdateIndex={handleUpdateIndex}
+                     setManualChange={setManualChange}
+                     lastDisplayedData={lastDisplayedData}
+                     manualChange={manualChange}
+                  />
+               </>
             ) : false
          }
-         {
-            activeTab == 1 ? (
-               <ContentDetailSite
-                  displayedData={displayedData}
-                  isAutoPlay={isAutoPlay}
-                  indexDisplay={indexDisplay}
-                  handleUpdateIndex={handleUpdateIndex}
-                  setManualChange={setManualChange}
-                  lastDisplayedData={lastDisplayedData}
-                  manualChange={manualChange}
-               />
+         { /* konten top BD Frequent */
+            activeTab == 2 && storageDataTopBD.length <= listSite.length ? (
+               <TopBDContent listdata={storageDataTopBD} site={selectedSiteTopBD} />
             ) : false
          }
 
       </div >
+   )
+}
+const Header = ({ activeTab, periode, setPeriode, setIsSubmit, isAutoPlay, setIsAutoPlay, lastDisplayedData, displayedData, selectedSiteTopBD, setSelectedSiteTopBD, listSite }: any) => {
+   return (
+      <div className={style.header}>
+         <div className={elstyle.header}>
+            {
+               activeTab == 1 ? (
+                  <h1>Machine Condition (Detail Site) <i className="fa-solid fa-chevron-left"></i></h1>
+               ) : activeTab == 2 ? (
+                  <h1>Top Breakdown Frequency</h1>
+               ) :
+                  (<h1>Machine Condition (All Site)</h1>)
+            }
+            <p>
+               Periode data <strong>{periode.startDate}</strong> s/d <strong>{periode.endDate}. </strong>
+               {activeTab == 2 ? (
+                  <select
+                     value={selectedSiteTopBD}
+                     className={style.selectsite}
+                     onChange={e => setSelectedSiteTopBD(e.target.value)}
+                  >
+                     {
+                        listSite.map((it: string, index: number) => (<option key={index} value={it}>Site {it} </option>))
+                     }
+                  </select>
+               ) : false}
+               <a href="#"> Ubah Periode.</a>
+            </p>
+            <DatePicker setPeriode={setPeriode} setIsSubmit={setIsSubmit} list={listPeriodeYear} />
+         </div>
+         { /* navigasi play or pause auto play */
+            activeTab == 1 ? (
+               <PlayNavigation
+                  auto={isAutoPlay}
+                  setPlay={setIsAutoPlay}
+               />
+            ) : false
+         }
+         <div className={"w-[23em]"}>
+            { /* menampilkan info site  */
+               activeTab == 1 && (displayedData != undefined) && (displayedData.site != '' && isAutoPlay) ?
+                  (<SiteIcon site={displayedData.site} />) : false
+            }
+            { /* menampilkan info site ketika top replay */
+               activeTab == 1 && (!isAutoPlay) ? (<SiteIcon site={lastDisplayedData.site} />) : false
+            }
+            { /* menampilkan info site on tab bd frequent */
+               activeTab == 2 ? (<SiteIcon site={selectedSiteTopBD} />) : false
+            }
+         </div>
+      </div>
    )
 }
 const DatePicker = ({ setPeriode, setIsSubmit, list }: any) => {
@@ -276,44 +318,6 @@ const ContentDetailSite = (props: any) => {
       </div>
    )
 }
-const SiteIcon = ({ site }: any) => {
-   const getSiteName = (site: string) => {
-      switch (site) {
-         case "BIB":
-            return 'PT. Borneo Indo Bara';
-         case "BA":
-            return "PT. Bukit Asam Tbk.";
-         case "MHU":
-            return "PT. Multi Harapan Utama";
-         case "ADW":
-            return "PT. Adaro Energy";
-         case "SKS":
-            return "PT. Surya Kalimantan Sejati";
-         case "BCP":
-            return "PT. Bengalon Coal Project";
-         case "MLP":
-            return "PT. Makmur Lestari Primatama";
-         case "MIP":
-            return "PT. Mustika Indah Permai.";
-         case "AMI":
-            return "PT. Adaro Metcoal Indonesia.";
-         case "ABP":
-            return "PT. Agung Bara Prima.";
-         default: ''
-      }
-   }
-   return (
-      <div className={elstyle.rightcont}>
-         {
-            site != '' ? (<img src={`./logo_site/${site}.png`} />) : false
-         }
-         <div>
-            <h1>SITE {site}</h1>
-            <p>{getSiteName(site)}</p>
-         </div>
-      </div>
-   )
-}
 const LoadingForm = () => {
    return (
       <div className={style.loading}>
@@ -337,6 +341,44 @@ const PlayNavigation = (props: any) => {
          <div>
             <h1 className={auto ? 'text-[#1B9C85]' : 'text-[#B70404]'}>{auto ? 'Now Playing' : 'Now Focus'}</h1>
             <p>{auto ? 'Auto preview each Site' : 'Previewing one Site'}</p>
+         </div>
+      </div>
+   )
+}
+const LegendIcon = () => {
+   return (
+      <div className={`${style.header} pt-[4em] pb-[1em] justify-center`}>
+         <div className="flex gap-[1em] items-center">
+            <img src="./Model.svg" width="40" />
+            <p className="text-[1.3em] text-slate-600 font-semibold">Model</p>
+         </div>
+         <div className="flex gap-[1em] items-center">
+            <img src="./Quantitiy.svg" width="40" />
+            <p className="text-[1.3em] text-slate-600 font-semibold">Quantity</p>
+         </div>
+         <div className="flex gap-[1em] items-center">
+            <img src="./MOHH.svg" width="40" />
+            <p className="text-[1.3em] text-slate-600 font-semibold">MOHH</p>
+         </div>
+         <div className="flex gap-[1em] items-center">
+            <img src="./Downtime.svg" width="40" />
+            <p className="text-[1.3em] text-slate-600 font-semibold">Downtime</p>
+         </div>
+         <div className="flex gap-[1em] items-center">
+            <img src="./Rasio RS.svg" width="40" />
+            <p className="text-[1.3em] text-slate-600 font-semibold">Rasio BS</p>
+         </div>
+         <div className="flex gap-[1em] items-center">
+            <img src="./MTTR.svg" width="40" />
+            <p className="text-[1.3em] text-slate-600 font-semibold">MTTR</p>
+         </div>
+         <div className="flex gap-[1em] items-center">
+            <img src="./MTBR.svg" width="40" />
+            <p className="text-[1.3em] text-slate-600 font-semibold">MTBF</p>
+         </div>
+         <div className="flex gap-[1em] items-center">
+            <img src="./PA.svg" width="40" />
+            <p className="text-[1.3em] text-slate-600 font-semibold">PA</p>
          </div>
       </div>
    )
