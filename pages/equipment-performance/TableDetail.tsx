@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import * as style from './style'
+import * as style from '../../misc/style'
 import elstyle from '../../styles/dashboard/index.module.css'
 import _ from 'lodash'
 interface ListData {

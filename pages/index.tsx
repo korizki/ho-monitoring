@@ -1,9 +1,5 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import Dashboard from './equipment-performance'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronLeft, faChevronRight, faPlay, faPause, faTools } from '@fortawesome/free-solid-svg-icons'
-const inter = Inter({ subsets: ['latin'] })
+import { faTools } from '@fortawesome/free-solid-svg-icons'
 
 export default function Home() {
   return (
