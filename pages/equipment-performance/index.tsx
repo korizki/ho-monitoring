@@ -1,7 +1,7 @@
 "use client"
 
 import * as MyType from '../../misc/customType'
-import * as style from './style'
+import * as style from '../../misc/style'
 import elstyle from '../../styles/dashboard/index.module.css'
 import $ from 'jquery'
 import 'daterangepicker/daterangepicker.css'

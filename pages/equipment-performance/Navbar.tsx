@@ -1,5 +1,5 @@
 import elstyle from '../../styles/dashboard/index.module.css'
-import * as style from './style'
+import * as style from '../../misc/style'
 import { useState } from 'react'
 import * as MyType from '../../misc/customType'
 

@@ -1,4 +1,4 @@
-import * as style from './style'
+import * as style from '../../misc/style'
 import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import elstyle from '../../styles/dashboard/index.module.css'
