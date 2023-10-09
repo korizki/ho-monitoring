@@ -187,3 +187,83 @@
 .wrapTable {
    animation: showright 1s ease;
 }
+
+.mainlink {
+   display: flex;
+   width: 25em;
+   gap: 1em;
+   justify-content: center;
+   align-items: center;
+}
+
+.mainlink>i {
+   width: 1.5em;
+}
+
+@media screen and (max-width: 512px) {
+   .mainhead {
+      padding: 1.5em 2em;
+   }
+
+   .mainhead>img {
+      width: 3em;
+      height: 3em
+   }
+
+   .mainhead~img {
+      top: 2em;
+      width: 100%
+   }
+
+   .maincenter {
+      padding: 2em 3em;
+      flex-direction: column-reverse;
+      align-items: center;
+      font-size: 14px;
+   }
+
+   .maincenter>img {
+      height: 20em;
+      width: auto;
+   }
+
+   .maincenter>div {
+      width: 100%
+   }
+
+   .maincenter>div>h1,
+   .maincenter>div>p {
+      font-size: 1.2em;
+   }
+
+   .maincenter>div>p {
+      margin-top: 1.5em
+   }
+
+   .maincenter>div>h1:nth-child(2) {
+      font-size: 2.2em;
+   }
+
+   .mainlink {
+      width: 100%;
+      padding: 1em 1.5em;
+   }
+
+   .mainlink span {
+      width: 100%;
+      text-align: center;
+      font-size: 1.2em;
+   }
+
+   .mainfooter {
+      padding: 1em;
+   }
+
+   .mainfooter p {
+      font-size: 1em;
+   }
+
+   .mainfooter p span {
+      display: block;
+   }
+}
