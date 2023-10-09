@@ -83,3 +83,9 @@ body {
 .loadinganimate {
   animation: bounce 2s infinite;
 }
+
+@media screen and (max-width: 512px) {
+  .daterangepicker {
+    right: 1em !important;
+  }
+}

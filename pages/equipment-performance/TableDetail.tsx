@@ -22,13 +22,12 @@ export default function TableDetail({ data }: any) {
       setListDisplayedData(dataDisplayed)
    }
    useEffect(() => {
-      // console.log(data)
       if (data != undefined) {
          processData(data)
       }
    }, [data])
    return (
-      <div className={`${style.wrapTableData}`}>
+      <div className={`${style.wrapTableData} ${elstyle.wraptable}`}>
          {
             listUnitType.map((type, index) => (
                <div key={index} className={`${style.outerCard} `} >

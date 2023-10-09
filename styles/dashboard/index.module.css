@@ -18,6 +18,10 @@
    color: white
 }
 
+.header {
+   position: relative;
+}
+
 .header>h1,
 .header~div>h1,
 .rightcont>div>h1 {
@@ -48,9 +52,7 @@
    margin-top: 0.2em;
 }
 
-.header {
-   position: relative
-}
+.header {}
 
 .header>p>strong,
 .header>p>a {
@@ -186,4 +188,305 @@
 
 .wrapTable {
    animation: showright 1s ease;
+}
+
+.mainlink {
+   display: flex;
+   width: 25em;
+   gap: 1em;
+   justify-content: center;
+   align-items: center;
+}
+
+.mainlink>i {
+   width: 1.5em;
+}
+
+@media screen and (max-width: 512px) {
+   .sitewrap {
+      width: 100%
+   }
+
+   .rootsum {
+      width: 100%;
+   }
+
+   .mainnav {
+      padding: 0.5em 1em;
+   }
+
+   .mainnav label {
+      height: 2em
+   }
+
+   .mainnav label>span {
+      width: 1.3em;
+      height: 1.3em;
+   }
+
+   .navbot>a {
+      padding: 0.65em;
+      font-size: 0.9em;
+   }
+
+   .mainnav label>input {
+      height: 1em
+   }
+
+   .mainnav>div>img {
+      width: 3em
+   }
+
+   .mainnav>div>h1 {
+      display: none;
+   }
+
+   .wraptable>div {
+      flex: 1;
+      width: 100%
+   }
+
+   .contentcenter>div {
+      width: 100%;
+   }
+
+   .contentcenter {
+      gap: 0em
+   }
+
+   .wraptable>div {
+      padding: 1em 0;
+   }
+
+   .wrapTable {
+      overflow: auto;
+      animation: none;
+   }
+
+   .wrapTable>table {
+      width: 100%;
+   }
+
+   .wrapbd {
+      padding: 1em;
+   }
+
+   .wrapbd>div {
+      margin-bottom: 2em;
+   }
+
+   .tf {
+      transform: translateY(-1em);
+   }
+
+   .outers {
+      width: 100%;
+      padding: 0;
+   }
+
+   .wrapTable>table>thead>tr>th>img {
+      width: 1.5em
+   }
+
+   .wrapTable>table>thead>tr>th {
+      padding: 0.5em;
+   }
+
+   .wrapTable>table>tbody>tr:last-child {
+      font-size: 1em
+   }
+
+   .wrapTable>table>tbody>tr>td {
+      font-size: 0.6em
+   }
+
+   .wrapTable>h3 {
+      font-size: 1.2em;
+      width: 100%;
+   }
+
+   .contentcenter {
+      padding: 0 1em;
+      padding-bottom: 2em;
+   }
+
+   .contentcenter>a {
+      opacity: 1;
+      font-size: 1em;
+      display: none;
+   }
+
+   .datepicker {
+      width: 4em !important;
+      overflow: hidden;
+      position: absolute;
+      right: 0;
+      bottom: 0em
+   }
+
+   .heads {
+      padding: 1em;
+      gap: 2em;
+      width: 100%;
+      margin: 0;
+   }
+
+   .navplay {
+      display: none;
+      padding: 0em 1em;
+   }
+
+   .navplay div {
+      display: none;
+   }
+
+   .sitewrap {
+      position: absolute;
+      margin: 0;
+      left: 0;
+      width: 100%;
+      margin-top: 10em;
+   }
+
+   .rightcont {
+      justify-content: center;
+      display: flex;
+   }
+
+   .err>img {
+      width: 20em;
+      margin-top: 5em
+   }
+
+   .err>div>h4 {
+      font-size: 1.8em;
+      margin-bottom: 0;
+   }
+
+   .err>div>p {
+      padding: 2em;
+      font-size: 0.9em;
+   }
+
+   .rightcont>img {
+      height: 3em
+   }
+
+   .rightcont>div>h1 {
+      font-size: 1.2em;
+      margin-bottom: 0.2em
+   }
+
+   .rightcont>div>p {
+      font-size: 0.9em
+   }
+
+   .header {
+      flex: 1;
+   }
+
+   .header>h1 {
+      font-size: 1.3em
+   }
+
+   .header>p {
+      font-size: 0.8em;
+   }
+
+   .legends {
+      flex-wrap: wrap;
+      margin-top: 5em;
+      padding: 1em;
+      gap: 1em 0;
+   }
+
+   .legends>div>img {
+      width: 1.5em
+   }
+
+   .legends>div>p {
+      font-size: 0.8em;
+   }
+
+   .legends>div {
+      gap: 0.5em;
+      width: 33%
+   }
+
+   .mainhead {
+      padding: 1.5em 2em;
+   }
+
+   .loading {
+      position: fixed;
+      height: 110%;
+      overflow-x: hidden;
+   }
+
+   .loading>p {
+      transform: translateY(-20%);
+      font-size: 2em;
+   }
+
+   .mainhead>img {
+      width: 3em;
+      height: 3em
+   }
+
+   .mainhead~img {
+      top: 2em;
+      width: 100%
+   }
+
+   .maincenter {
+      padding: 2em 3em;
+      flex-direction: column-reverse;
+      align-items: center;
+      font-size: 14px;
+   }
+
+   .maincenter>img {
+      height: 20em;
+      width: auto;
+   }
+
+   .maincenter>div {
+      width: 100%
+   }
+
+   .maincenter>div>h1,
+   .maincenter>div>p {
+      font-size: 1.2em;
+   }
+
+   .maincenter>div>p {
+      margin-top: 1.5em
+   }
+
+   .maincenter>div>h1:nth-child(2) {
+      font-size: 2.2em;
+   }
+
+   .mainlink {
+      width: 100%;
+      padding: 1em 1.5em;
+   }
+
+   .mainlink span {
+      width: 100%;
+      text-align: center;
+      font-size: 1.2em;
+   }
+
+   .mainfooter {
+      padding: 1em;
+   }
+
+   .mainfooter p {
+      font-size: 1em;
+   }
+
+   .mainfooter p span {
+      display: block;
+   }
 }
