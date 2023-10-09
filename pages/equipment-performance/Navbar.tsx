@@ -24,7 +24,7 @@ export default function Navbar({ activeTab, setActiveTab }: MyType.NavbarProps) 
          </div>
          {
             showToolbar ? (
-               <div className={`${style.nav} `}>
+               <div className={`${style.nav} ${elstyle.navbot}`}>
                   <a
                      href="#"
                      onClick={() => setActiveTab(1)}

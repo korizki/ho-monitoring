@@ -51,17 +51,17 @@ export default function TopBDContent(props: any) {
       }
    }, [listdata, site])
    return (
-      <div className={`${style.wrapTableData} p-[2em] `}>
+      <div className={`${style.wrapTableData} p-[2em] ${elstyle.wrapbd}`}>
          { /* legend */
             displayedData.length ? (
-               <div className="w-full">
+               <div className={`w-full ${elstyle.tf}`}>
                   <LegendIcon />
                </div>
             ) : false
          }
          {/* render elemen jika list data tersedia */
             displayedData.map((it, index) => (
-               <div key={index} className={`${style.outerCard}`} >
+               <div key={index} className={`${style.outerCard} ${elstyle.outers}`} >
                   <div className={`${style.tableCard} ${elstyle.wrapTable}`}>
                      <h3 className={style.headTable}>{it.type}</h3>
                      <TableContent it={it} generateList={generateList} />
@@ -71,7 +71,7 @@ export default function TopBDContent(props: any) {
          }
          { /* tampilkan pesan data tidak tersedia */
             !displayedData.length ? (
-               <div className="flex justify-center w-full flex-col items-center">
+               <div className={`flex justify-center w-full flex-col items-center ${elstyle.err}`}>
                   <img src="./error.png" className="w-[35em]" />
                   <div className="text-center">
                      <h4 className="text-[2.5em] mb-3 font-semibold text-rose-600">Maaf Data Tidak Tersedia</h4>
@@ -133,7 +133,7 @@ const TableContent = ({ it, generateList }: any) => {
 }
 const LegendIcon = () => {
    return (
-      <div className={`${style.header} pt-[2em] pb-[1em] justify-center`}>
+      <div className={`${style.header} ${elstyle.legends} pt-[2em] pb-[1em] justify-center`}>
          <div className="flex gap-[1em] items-center">
             <img src="./Model.svg" width="40" />
             <p className="text-[1.3em] text-slate-600 font-semibold">Model</p>

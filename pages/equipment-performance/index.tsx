@@ -6,6 +6,7 @@ import elstyle from '../../styles/dashboard/index.module.css'
 import $ from 'jquery'
 import 'daterangepicker/daterangepicker.css'
 import 'daterangepicker/daterangepicker.js'
+import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import _ from 'lodash'
 import Navbar from './Navbar'
@@ -161,7 +162,15 @@ export default function Dashboard() {
       }
    }, [isSubmit, periode])
    return (
-      <div>
+      <div className={elstyle.rootsum}>
+         <Head>
+            <title>Equipment Performance - PT. Putra Perkasa Abadi</title>
+            <link rel="icon" href="./ppa.png" />
+            <meta name="title" content="Report Portal - PT. Putra Perkasa Abadi" />
+            <meta name="description" content="Web based Application for Monitoring Performance of All Site PT. Putra Perkasa Abadi. Getting update for Equipment Performance and others. " />
+            <meta property="og:url" content="https://reports.ppa-ho.net/" />
+            <meta property="og:image" content="./meta-image.png" />
+         </Head>
          {showLoading ? (<LoadingForm />) : false}
          <Navbar
             activeTab={activeTab}
@@ -207,7 +216,7 @@ export default function Dashboard() {
 }
 const Header = ({ activeTab, periode, setPeriode, setIsSubmit, isAutoPlay, setIsAutoPlay, lastDisplayedData, displayedData, selectedSiteTopBD, setSelectedSiteTopBD, listSite }: any) => {
    return (
-      <div className={style.header}>
+      <div className={`${style.header} ${elstyle.heads}`}>
          <div className={elstyle.header}>
             {
                activeTab == 1 ? (
@@ -218,7 +227,7 @@ const Header = ({ activeTab, periode, setPeriode, setIsSubmit, isAutoPlay, setIs
                   (<h1>Machine Condition (All Site)</h1>)
             }
             <p>
-               Periode data <strong>{periode.startDate}</strong> s/d <strong>{periode.endDate}. </strong>
+               Periode <strong>{periode.startDate}</strong> s/d <strong>{periode.endDate}. </strong>
                {activeTab == 2 ? (
                   <select
                      value={selectedSiteTopBD}
@@ -242,7 +251,7 @@ const Header = ({ activeTab, periode, setPeriode, setIsSubmit, isAutoPlay, setIs
                />
             ) : false
          }
-         <div className={"w-[23em]"}>
+         <div className={`w-[23em] ${elstyle.sitewrap}`}>
             { /* menampilkan info site  */
                activeTab == 1 && (displayedData != undefined) && (displayedData.site != '' && isAutoPlay) ?
                   (<SiteIcon site={displayedData.site} />) : false
@@ -281,7 +290,7 @@ const DatePicker = ({ setPeriode, setIsSubmit, list }: any) => {
       })
    }, [])
    return (
-      <div className="absolute right-0 w-[7em] bottom-[0.2em] opacity-0">
+      <div className={`absolute right-0 overflow-hidden w-[6em] bottom-[0.2em] opacity-0 ${elstyle.datepicker}`}>
          <input name="daterange" className="cursor-pointer" />
       </div>
    )
@@ -320,7 +329,7 @@ const ContentDetailSite = (props: any) => {
 }
 const LoadingForm = () => {
    return (
-      <div className={style.loading}>
+      <div className={`${style.loading} ${elstyle.loading}`}>
          <p className="text-[3.5em] text-white loadinganimate">Preparing your data</p>
       </div>
    )
@@ -347,7 +356,7 @@ const PlayNavigation = (props: any) => {
 }
 const LegendIcon = () => {
    return (
-      <div className={`${style.header} pt-[4em] pb-[1em] justify-center`}>
+      <div className={`${style.header} ${elstyle.legends} pt-[4em] pb-[1em] justify-center`}>
          <div className="flex gap-[1em] items-center">
             <img src="./Model.svg" width="40" />
             <p className="text-[1.3em] text-slate-600 font-semibold">Model</p>
