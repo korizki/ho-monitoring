@@ -148,13 +148,13 @@
 .mapsummary>thead>tr>th {
    padding: 0.75em;
    background: rgb(240, 240, 240);
-   color: #61677A;
+   color: rgb(50, 50, 50);
 }
 
 .navplay {
    cursor: pointer;
    transition: all 0.3s;
-   outline: 1px solid rgb(230, 230, 230);
+   outline: 0.1em solid rgb(240, 240, 240);
    box-shadow: 0px 0px 8px 0 rgb(230, 230, 230);
 }
 
