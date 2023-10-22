@@ -17,6 +17,10 @@
   }
 }
 
+svg {
+  height: 1em;
+}
+
 body {
   color: #272829;
 }

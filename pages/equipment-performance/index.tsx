@@ -192,7 +192,6 @@ export default function Dashboard() {
          { /* konten tab detail  */
             activeTab == 1 ? (
                <>
-                  <LegendIcon />
                   <ContentDetailSite
                      displayedData={displayedData}
                      isAutoPlay={isAutoPlay}
@@ -350,44 +349,6 @@ const PlayNavigation = (props: any) => {
          <div>
             <h1 className={auto ? 'text-[#1B9C85]' : 'text-[#B70404]'}>{auto ? 'Now Playing' : 'Now Focus'}</h1>
             <p>{auto ? 'Auto preview each Site' : 'Previewing one Site'}</p>
-         </div>
-      </div>
-   )
-}
-const LegendIcon = () => {
-   return (
-      <div className={`${style.header} ${elstyle.legends} pt-[4em] pb-[1em] justify-center`}>
-         <div className="flex gap-[1em] items-center">
-            <img src="./Model.svg" width="40" />
-            <p className="text-[1.3em] text-slate-600 font-semibold">Model</p>
-         </div>
-         <div className="flex gap-[1em] items-center">
-            <img src="./Quantitiy.svg" width="40" />
-            <p className="text-[1.3em] text-slate-600 font-semibold">Quantity</p>
-         </div>
-         <div className="flex gap-[1em] items-center">
-            <img src="./MOHH.svg" width="40" />
-            <p className="text-[1.3em] text-slate-600 font-semibold">MOHH</p>
-         </div>
-         <div className="flex gap-[1em] items-center">
-            <img src="./Downtime.svg" width="40" />
-            <p className="text-[1.3em] text-slate-600 font-semibold">Downtime</p>
-         </div>
-         <div className="flex gap-[1em] items-center">
-            <img src="./Rasio RS.svg" width="40" />
-            <p className="text-[1.3em] text-slate-600 font-semibold">Rasio BS</p>
-         </div>
-         <div className="flex gap-[1em] items-center">
-            <img src="./MTTR.svg" width="40" />
-            <p className="text-[1.3em] text-slate-600 font-semibold">MTTR</p>
-         </div>
-         <div className="flex gap-[1em] items-center">
-            <img src="./MTBR.svg" width="40" />
-            <p className="text-[1.3em] text-slate-600 font-semibold">MTBF</p>
-         </div>
-         <div className="flex gap-[1em] items-center">
-            <img src="./PA.svg" width="40" />
-            <p className="text-[1.3em] text-slate-600 font-semibold">PA</p>
          </div>
       </div>
    )
