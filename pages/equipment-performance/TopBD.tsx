@@ -52,10 +52,10 @@ export default function TopBDContent(props: any) {
          { /* tampilkan pesan data tidak tersedia */
             !displayedData.length ? (
                <div className={`flex justify-center w-full flex-col items-center ${elstyle.err}`}>
-                  <img src="./error.png" className="w-[35em]" />
-                  <div className="text-center">
-                     <h4 className="text-[2.5em] mt-2 mb-3 font-semibold">Maaf Data Tidak Tersedia</h4>
-                     <p className="text-[1.5em] text-slate-500">Silahkan ulangi pencarian <strong className="text-slate-700">Site</strong> berbeda.</p>
+                  <img src="./Launch.webp" className="w-[25em]" />
+                  <div className="text-center mt-[2em]">
+                     <h4 className="text-[2.5em] mt-2 mb-3 font-semibold">Everything Looks Good</h4>
+                     <p className="text-[1.5em] text-slate-500">Tidak ada Unit dengan durasi <strong className="text-slate-700">Breakdown yang lama</strong>.</p>
                   </div>
                </div>
             ) : false

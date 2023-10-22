@@ -34,7 +34,7 @@ export default function Navbar({ activeTab, setActiveTab }: MyType.NavbarProps) 
                      href="#"
                      onClick={() => setActiveTab(2)}
                      className={`${elstyle.navButton} ${activeTab == 2 ? elstyle.navActive : ''}`}
-                  >Top BD Frequent</a>
+                  >Top Breakdown Duration</a>
                </div>
             ) : false
          }
