@@ -54,8 +54,8 @@ export default function TopBDContent(props: any) {
                <div className={`flex justify-center w-full flex-col items-center ${elstyle.err}`}>
                   <img src="./error.png" className="w-[35em]" />
                   <div className="text-center">
-                     <h4 className="text-[2.5em] mb-3 font-semibold text-rose-600">Maaf Data Tidak Tersedia</h4>
-                     <p className="text-[1.5em] text-slate-500">Silahkan ulangi pencarian <strong className="text-slate-700">Site</strong> atau <strong className="text-slate-700">Periode Tanggal</strong> berbeda.</p>
+                     <h4 className="text-[2.5em] mt-2 mb-3 font-semibold">Maaf Data Tidak Tersedia</h4>
+                     <p className="text-[1.5em] text-slate-500">Silahkan ulangi pencarian <strong className="text-slate-700">Site</strong> berbeda.</p>
                   </div>
                </div>
             ) : false
