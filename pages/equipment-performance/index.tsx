@@ -86,9 +86,10 @@ export default function Dashboard() {
    // get data top Breakdown frequent
    const getDataTopBD = (listSite: string[], periode: MyType.Periode) => {
       listSite.forEach((it: string) => {
+         let date = new Date().toLocaleDateString('fr-CA')
          let site = it == 'ABP' ? 'amm-abp.net' : `ppa-${it.toLowerCase()}.net`
          $.ajax({
-            url: `https://api22.${site}/v1/bd/topBreakdown?startDate=${periode.startDate}&endDate=${periode.endDate}`,
+            url: `https://api22.${site}/v1/bd/topBreakdown?startDate=${date}&endDate=${date}`,
             method: 'GET',
             success: data => {
                setListDataTopBD((prev: MyType.DataTopBD[]) => {
@@ -219,28 +220,30 @@ const Header = ({ activeTab, periode, setPeriode, setIsSubmit, isAutoPlay, setIs
          <div className={elstyle.header}>
             {
                activeTab == 1 ? (
-                  <h1>Machine Condition (Detail Site) <i className="fa-solid fa-chevron-left"></i></h1>
+                  <>
+                     <h1>Machine Condition (Detail Site) </h1>
+                     <p>Periode <strong>{periode.startDate}</strong> s/d <strong>{periode.endDate}. <a href="#"> Ubah Periode.</a></strong></p>
+                     <DatePicker setPeriode={setPeriode} setIsSubmit={setIsSubmit} list={listPeriodeYear} />
+                  </>
                ) : activeTab == 2 ? (
-                  <h1>Top Breakdown Frequency</h1>
+                  <>
+                     <h1>Top High Breakdown Duration</h1>
+                     <p>Menampilkan data tanggal <strong>{new Date().toLocaleDateString('fr-CA')}</strong>,
+                        <select
+                           value={selectedSiteTopBD}
+                           className={style.selectsite}
+                           onChange={e => setSelectedSiteTopBD(e.target.value)}
+                        >
+                           {
+                              listSite.map((it: string, index: number) => (<option key={index} value={it}>Site {it} </option>))
+                           }
+                        </select>
+                     </p>
+                  </>
                ) :
                   (<h1>Machine Condition (All Site)</h1>)
             }
-            <p>
-               Periode <strong>{periode.startDate}</strong> s/d <strong>{periode.endDate}. </strong>
-               {activeTab == 2 ? (
-                  <select
-                     value={selectedSiteTopBD}
-                     className={style.selectsite}
-                     onChange={e => setSelectedSiteTopBD(e.target.value)}
-                  >
-                     {
-                        listSite.map((it: string, index: number) => (<option key={index} value={it}>Site {it} </option>))
-                     }
-                  </select>
-               ) : false}
-               <a href="#"> Ubah Periode.</a>
-            </p>
-            <DatePicker setPeriode={setPeriode} setIsSubmit={setIsSubmit} list={listPeriodeYear} />
+
          </div>
          { /* navigasi play or pause auto play */
             activeTab == 1 ? (

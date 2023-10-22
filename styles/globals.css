@@ -92,4 +92,13 @@ body {
   .daterangepicker {
     right: 1em !important;
   }
+
+  select {
+    background: transparent;
+  }
+
+  select:focus {
+    outline: none;
+    border: none;
+  }
 }

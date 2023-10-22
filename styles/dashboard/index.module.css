@@ -224,9 +224,13 @@
       height: 1.3em;
    }
 
+   .navbot {
+      padding: 0.1em;
+   }
+
    .navbot>a {
-      padding: 0.65em;
-      font-size: 0.9em;
+      padding: 0.75em;
+      font-size: 0.8em;
    }
 
    .mainnav label>input {
@@ -261,6 +265,10 @@
    .wrapTable {
       overflow: auto;
       animation: none;
+   }
+
+   .wrapTable>h3 {
+      font-size: 1em !important;
    }
 
    .wrapTable>table {
@@ -359,12 +367,12 @@
    }
 
    .err>div>h4 {
-      font-size: 1.8em;
+      font-size: 1.5em;
       margin-bottom: 0;
    }
 
    .err>div>p {
-      padding: 2em;
+      padding: 0.5em;
       font-size: 0.9em;
    }
 
@@ -386,11 +394,21 @@
    }
 
    .header>h1 {
-      font-size: 1.3em
+      font-size: 1.2em
    }
 
    .header>p {
       font-size: 0.8em;
+   }
+
+   .mapsummary>thead>tr>th {
+      font-size: .5em;
+      padding: 0.5em 0.2em;
+   }
+
+   .wraptable,
+   .wrapbd {
+      margin-top: 5em;
    }
 
    .legends {
@@ -429,8 +447,8 @@
    }
 
    .mainhead>img {
-      width: 3em;
-      height: 3em
+      width: 2.5em;
+      height: 2.5em
    }
 
    .mainhead~img {
@@ -479,14 +497,11 @@
    }
 
    .mainfooter {
-      padding: 1em;
+      padding: 1em !important;
    }
 
    .mainfooter p {
-      font-size: 1em;
+      font-size: 0.8em;
    }
 
-   .mainfooter p span {
-      display: block;
-   }
 }
