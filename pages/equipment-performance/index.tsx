@@ -84,7 +84,7 @@ export default function Dashboard() {
       })
    }
    // get data top Breakdown frequent
-   const getDataTopBD = (listSite: string[], periode: MyType.Periode) => {
+   const getDataTopBD = (listSite: string[]) => {
       listSite.forEach((it: string) => {
          let date = new Date().toLocaleDateString('fr-CA')
          let site = it == 'ABP' ? 'amm-abp.net' : `ppa-${it.toLowerCase()}.net`
@@ -158,7 +158,7 @@ export default function Dashboard() {
    useEffect(() => {
       if (isSubmit) {
          getDataFromEndPoint(listSite, periode)
-         getDataTopBD(listSite, periode)
+         getDataTopBD(listSite)
          setIsSubmit(false)
       }
    }, [isSubmit, periode])
@@ -207,7 +207,7 @@ export default function Dashboard() {
          }
          { /* konten top BD Frequent */
             activeTab == 2 && storageDataTopBD.length <= listSite.length ? (
-               <TopBDContent listdata={storageDataTopBD} site={selectedSiteTopBD} />
+               <TopBDContent listdata={storageDataTopBD} site={selectedSiteTopBD} refresh={getDataTopBD} allSite={listSite} />
             ) : false
          }
 

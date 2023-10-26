@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import elstyle from '../../styles/dashboard/index.module.css'
 
 export default function TopBDContent(props: any) {
-   const { listdata, site } = props
+   const { listdata, site, refresh, allSite } = props
    const [displayedData, setDisplayedData] = useState<any[]>([])
    // re-formatting data 
    const processData = (rawData: any) => {
@@ -37,6 +37,10 @@ export default function TopBDContent(props: any) {
          setDisplayedData([])
       }
    }, [listdata, site])
+   useEffect(() => {
+      const reload = setTimeout(() => refresh(allSite), 15000)
+      return () => clearTimeout(reload)
+   }, [])
    return (
       <div className={`${style.wrapTableData} p-[2em] ${elstyle.wrapbd}`}>
          {/* render elemen jika list data tersedia */
